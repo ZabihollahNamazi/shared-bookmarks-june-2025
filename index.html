@@ -5,9 +5,24 @@
   </head>
   <body>
     <div>
-      <select name="user-dropDown" id="user-dropDown">
-        <option value="">Select a User</option>
-      </select>
+      <form action="" id="user-form">
+        <select name="user-dropDown" id="user-dropDown">
+          <option value="">Select a User</option>
+        </select>
+      </form>
+      <hr>
+      <form action="" id="data-form">
+        <label for="title">Tiltle:</label>
+        <input type="text" name="title" id="title">
+        <br>
+        <label for="link">Link:</label>
+        <input type="url" name="link" id="link">
+        <br>
+        <label for="desc">Description:</label>
+        <textarea name="desc" id="desc"></textarea>
+        <br>
+        <button>Submit</button>
+      </form>
     </div>
     <div>
       <ul id="bookmarks-list">
