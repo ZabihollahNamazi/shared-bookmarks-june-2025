@@ -20,30 +20,44 @@ function userDropdown(users){
   }
 
   userDropDown.addEventListener("change", ()=>{
-    const userDropDown = document.getElementById("user-dropDown");
+    document.getElementById("data-form").style.display = "block";
     const selectedUser = userDropDown.options[userDropDown.selectedIndex].value;
     console.log(selectedUser);
-    // clearData(selectedUser)
+    // clearData(selectedUser);
     displayData(selectedUser);
+    
   })
-}[0]
+}
 
-function addDataToStorage(userId){
-  const title = document.getElementById("title");
-  const link = document.getElementById("link");
-  const desc = document.getElementById("desc");
-  const time = new Date(); // saves the date like "2025-06-21T14:30:00.000Z" later we need it for dateTime tag
+function addDataToStorage(){
+  
+  const formData = document.getElementById("data-form");
+  const btnSubmit = document.getElementById("btn-submit");
 
-  const dataToAdd = {
+  btnSubmit.addEventListener("click", (e)=>{
+    e.preventDefault();
+    const userDropDown = document.getElementById("user-dropDown");
+    const selectedUser = userDropDown.options[userDropDown.selectedIndex].value;
+
+    const title = document.getElementById("title");
+    const link = document.getElementById("link");
+    const desc = document.getElementById("desc");
+    const time = new Date().toISOString(); // saves the date like "2025-06-21T14:30:00.000Z" later we need it for dateTime tag
+
+    const dataToAdd = {
     title: title.value,
     link: link.value,
     desc: desc.value,
     time: time
   }
-  const dataStorageUser = getData(userId) || [];
+  const dataStorageUser = getData(selectedUser) || [];
 
   dataStorageUser.push(dataToAdd);
-  setData(userId, dataStorageUser)
+  setData(selectedUser, dataStorageUser);
+  displayData(selectedUser);
+  formData.reset();
+  })
+  
 }
 
 function displayData(userId){
@@ -58,7 +72,7 @@ function displayData(userId){
     bookmarkList.appendChild(li);
   }
   else{
-    receivedUserData.sort((a, b) => a.time - b.time);
+    receivedUserData.sort((a, b) => new Date(a.time) - new Date(b.time));
     for(let i = 0; i < receivedUserData.length; i++){
       let li = document.createElement("li");
       let title = document.createElement("h3");
@@ -92,4 +106,5 @@ function displayData(userId){
 window.onload = function () {
   const users = getUserIds();
   userDropdown(users);
+  addDataToStorage();
 };
