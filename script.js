@@ -6,7 +6,21 @@
 
 import { getUserIds } from "./storage.js";
 
+function userDropdown(users){
+  const userDropDown = document.getElementById("user-dropDown");
+
+  for(let i = 0; i < users.length; i++){
+    let option = document.createElement("option");
+    option.value = users[i];
+    option.innerHTML = `User ${users[i]}`;
+    userDropDown.appendChild(option);
+  }
+}
+
+
+
+
 window.onload = function () {
   const users = getUserIds();
-  document.querySelector("body").innerText = `There are ${users.length} users`;
+  userDropdown(users);
 };
