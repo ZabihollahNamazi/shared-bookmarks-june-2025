@@ -6,8 +6,10 @@
 
 import { getUserIds, setData, getData, clearData } from "./storage.js";
 
+document.getElementById("data-form").style.display = "none";
+
 function userDropdown(users){
-  const userForm = document.getElementById("user-form");
+  // const userForm = document.getElementById("user-form");
   const userDropDown = document.getElementById("user-dropDown");
 
   for(let i = 0; i < users.length; i++){
@@ -17,19 +19,31 @@ function userDropdown(users){
     userDropDown.appendChild(option);
   }
 
-  userForm.addEventListener("change", ()=>{
+  userDropDown.addEventListener("change", ()=>{
     const userDropDown = document.getElementById("user-dropDown");
     const selectedUser = userDropDown.options[userDropDown.selectedIndex].value;
     console.log(selectedUser);
-    clearData(selectedUser)
+    // clearData(selectedUser)
     displayData(selectedUser);
   })
-}
+}[0]
 
-function addDataToStorage(){
-  
+function addDataToStorage(userId){
+  const title = document.getElementById("title");
+  const link = document.getElementById("link");
+  const desc = document.getElementById("desc");
+  const time = new Date(); // saves the date like "2025-06-21T14:30:00.000Z" later we need it for dateTime tag
 
+  const dataToAdd = {
+    title: title.value,
+    link: link.value,
+    desc: desc.value,
+    time: time
+  }
+  const dataStorageUser = getData(userId) || [];
 
+  dataStorageUser.push(dataToAdd);
+  setData(userId, dataStorageUser)
 }
 
 function displayData(userId){
@@ -38,15 +52,39 @@ function displayData(userId){
 
   const receivedUserData = getData(userId);
   console.log(receivedUserData);
-  if(!receivedUserData){
+  if(!receivedUserData || receivedUserData.length === 0){
     let li = document.createElement("li");
     li.innerHTML = "There is no bookmarks for this user";
     bookmarkList.appendChild(li);
   }
   else{
-    let lii = document.createElement("li");
-    lii.innerHTML = receivedUserData;
-    bookmarkList.appendChild(lii);
+    receivedUserData.sort((a, b) => a.time - b.time);
+    for(let i = 0; i < receivedUserData.length; i++){
+      let li = document.createElement("li");
+      let title = document.createElement("h3");
+      let decs = document.createElement("p");
+      let link = document.createElement("a");
+      let time = document.createElement("time")
+
+      link.href = receivedUserData[i].link;
+      link.innerHTML = receivedUserData[i].title;
+      title.appendChild(link);
+
+      decs.innerHTML = receivedUserData[i].desc;
+
+      const dateObj = new Date(receivedUserData[i].time);
+
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // add 1 & pad with zero
+      const day = String(dateObj.getDate()).padStart(2, '0');
+
+      time.dateTime = receivedUserData[i].time;
+      time.textContent = `${year}-${month}-${day}`;
+
+      li.append(title, decs, time);
+
+      bookmarkList.appendChild(li);
+    }
   }
 }
 
