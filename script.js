@@ -5,6 +5,7 @@
 // You can't open the index.html file using a file:// URL.
 
 import { getUserIds, setData, getData, clearData } from "./storage.js";
+import { dateForDisplay } from "./common.js";
 
 document.getElementById("data-form").style.display = "none";
 
@@ -91,15 +92,23 @@ function displayData(userId){
       const year = dateObj.getFullYear();
       const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // add 1 & pad with zero
       const day = String(dateObj.getDate()).padStart(2, '0');
-
+      console.log(dateObj, "dateObj")
       time.dateTime = receivedUserData[i].time;
-      time.textContent = `${year}-${month}-${day}`;
+      time.textContent = dateForDisplay(dateObj);
 
       li.append(title, decs, time);
 
       bookmarkList.appendChild(li);
     }
   }
+}
+
+export function dateForDisplay(dateObj){
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // add 1 & pad with zero
+      const day = String(dateObj.getDate()).padStart(2, '0');
+
+      return `${year}-${month}-${day}`;
 }
 
 
