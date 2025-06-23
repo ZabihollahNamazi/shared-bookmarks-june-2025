@@ -72,7 +72,7 @@ function displayData(userId){
     bookmarkList.appendChild(li);
   }
   else{
-    receivedUserData.sort((a, b) => new Date(a.time) - new Date(b.time));
+    receivedUserData.sort((a, b) => new Date(b.time) - new Date(a.time)); //sorting in reverse chronological order ,from newest to oldest
     for(let i = 0; i < receivedUserData.length; i++){
       let li = document.createElement("li");
       let title = document.createElement("h3");
